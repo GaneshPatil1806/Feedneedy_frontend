@@ -1,0 +1,86 @@
+
+.card {
+  box-shadow: 0 0 0.2em rgba(25, 0, 58, 0.15);
+  padding: 3.0em 1em;
+  border-radius: 0.6em;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transition: 0.3s;
+  text-align: center;
+  margin-top: 0px;
+  width: 80%;
+  display: grid;
+}
+.card .img-container {
+  width: 10em;
+  height: 10em;
+  background-color: #00255B;
+  padding: 0.5em;
+  border-radius: 50%;
+  margin: 0 auto 2em auto;
+}
+.card img {
+  width: 100%;
+  border-radius: 50%;
+}
+.card h3 {
+  font-weight: 500;
+}
+.card p {
+  font-weight: 300;
+  text-transform: uppercase;
+  margin: 0.5em 0 2em 0;
+  letter-spacing: 2px;
+}
+.icons {
+  width: 50%;
+  min-width: 180px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+}
+.card a {
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.4em;
+}
+.card:hover {
+background-color:#4992FF;
+  color: rgb(255, 255, 255);
+  transition: 0.7s;
+}
+.card:hover .img-container {
+  transform: scale(1.15);
+  transition: 0.2s;
+}
+.team_members
+{
+  display: grid;
+    margin-top: 20px;
+    grid-template-columns: 33% 33% 33%;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    row-gap: 20px;
+}
+.team-section
+{
+    text-align: center;
+    margin-top: 30px;
+}
+.team-section h1
+{
+    font-weight: 700;
+    font-size: 54px;
+    color: #00255B;
+}
+.team_members2
+{
+  display: grid;
+    margin-top: 20px;
+    grid-template-columns: 33% 33%;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    margin-bottom: 20px;
+}

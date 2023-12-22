@@ -1,0 +1,134 @@
+.main_container
+{
+  padding-bottom: 20px;
+}
+
+.DonationContainer
+{
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  height: auto;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+}
+.inputcontainer
+{
+  text-align: center;
+  padding-bottom: 20px;
+}
+.inputcontainer h1
+{
+  font-weight: 700;
+  font-size: 54px;
+  color: #00255B;
+}
+.inputcontainer form
+{
+  background-color: #4992FF;
+  padding-left: 20px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 3px 3px rgb(71, 71, 71);
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+.inputcontainer form:hover
+{
+  box-shadow: 4px 4px 4px 4px rgb(43, 43, 43);
+  transition: all 0.5s ease;
+}
+.input_group label
+{
+  font-size: 24px;
+  font-weight: 500;
+  color: white;
+}
+.input_group input
+{
+  width: 80%;
+  padding: 8px;
+  padding-top: 4px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #00255B;
+  color: #00255B;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 5px;
+}
+.input_group input:focus
+{
+  outline: none;
+}
+.input_group input::placeholder
+{
+  color: #00255B;
+  font-size: 20px;
+  text-align: center;
+}
+.submit-btn1
+{
+  margin-top: 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 5px;
+  width: 50%;
+  text-decoration: none;
+  border: none;
+  color: #00255B;
+  box-shadow: 2px 2px 3px 3px rgb(39, 39, 39);
+}
+.submit-btn1 NavLink
+{
+  text-decoration: none;
+}
+.submit-btn1:hover
+{
+  background-color: #00255B;
+  color: white;
+  transition: all 0.5s ease;
+}
+.active-donations
+{
+  background-color: #4992FF;
+}
+.heading-active
+{
+  text-align: center;
+  padding-top: 10px;
+}
+.heading-active h1
+{
+  font-weight: 700;
+  font-size: 54px;
+  color: #00255B;
+}
+.prev-donations
+{
+  width: 100%;
+  padding: 20px;
+  padding-top: 0px;
+  background-color: #4992FF;
+  display: grid;
+  grid-template-columns: 28% 28% 28%;
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  column-gap: 40px;
+}
+.active_donations
+{
+  margin-top: 32px;
+  height: auto;
+  width: 100%;
+  width: 100%;
+  background-color: #4992FF;
+}
+.total-card
+{
+  background-color: white;
+}

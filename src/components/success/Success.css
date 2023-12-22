@@ -1,0 +1,20 @@
+.successful
+{
+    display: grid;
+    grid-template-columns:  100%;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    margin-top: 70px;
+}
+.heading_succ h1
+{
+    font-weight: 700;
+    font-size: 54px;
+    color: #00255B;
+}
+.success_image img
+{
+    height: 500px;
+    width: 700px;
+}
