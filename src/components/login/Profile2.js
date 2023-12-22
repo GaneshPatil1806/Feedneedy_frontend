@@ -21,6 +21,8 @@ const Profile = () => {
                 setData1(responseData);
                 setError(null);
                 console.log(responseData);
+            } else {
+                throw new Error(`Failed to fetch data. Status: ${response.status}`);
             }
         } catch (error) {
             setError(error.message);
@@ -36,6 +38,8 @@ const Profile = () => {
                 setData(responseData);
                 setError(null);
                 console.log(responseData);
+            } else {
+                throw new Error(`Failed to fetch data. Status: ${response.status}`);
             }
         } catch (error) {
             setError(error.message);
@@ -45,6 +49,12 @@ const Profile = () => {
 
     return (
         <>
+            {error && (
+                <div className="error-message">
+                    <p>Error: {error}</p>
+                </div>
+            )}
+
             <div className="profile">
                 <div className="image">
                     <img src={logo} alt="Profile" />
