@@ -16,30 +16,38 @@ const Profile = () => {
     const fetchData1 = async () => {
         try {
             const response = await fetch(`/getProfile`);
+            
             if (response.ok) {
                 const responseData = await response.json();
                 setData1(responseData);
                 setError(null);
                 console.log(responseData);
+            } else {
+                setError(`Error: ${response.status} - ${response.statusText}`);
+                console.error(`Error: ${response.status} - ${response.statusText}`);
             }
         } catch (error) {
-            setError(error.message);
-            console.log(error);
+            setError(`Error: ${error.message}`);
+            console.error(`Error: ${error.message}`);
         }
     };
 
     const fetchData = async () => {
         try {
             const response = await fetch(`/SeeItems`);
+            
             if (response.ok) {
                 const responseData = await response.json();
                 setData(responseData);
                 setError(null);
                 console.log(responseData);
+            } else {
+                setError(`Error: ${response.status} - ${response.statusText}`);
+                console.error(`Error: ${response.status} - ${response.statusText}`);
             }
         } catch (error) {
-            setError(error.message);
-            console.log(error);
+            setError(`Error: ${error.message}`);
+            console.error(`Error: ${error.message}`);
         }
     };
 
@@ -50,16 +58,20 @@ const Profile = () => {
             </div>
             <div className="card-struct">
                 <h5 className="card-title">Profile</h5>
-                <p>
-                    Name: {data1.name} <br />
-                    <hr />
-                    Address: {data1.address} <br />
-                    <hr />
-                    Mobile: {data1.mobile} <br />
-                    <hr />
-                    Gmail: {data1.email} <br />
-                    <hr />
-                </p>
+                {error ? (
+                    <p>Error loading profile data: {error}</p>
+                ) : (
+                    <p>
+                        Name: {data1.name} <br />
+                        <hr />
+                        Address: {data1.address} <br />
+                        <hr />
+                        Mobile: {data1.mobile} <br />
+                        <hr />
+                        Gmail: {data1.email} <br />
+                        <hr />
+                    </p>
+                )}
             </div>
 
             <div className="heading-active">
@@ -68,6 +80,7 @@ const Profile = () => {
             <div className="cards-content">
                 {data.map((item) => (
                     <Cards1
+                        key={item._id} // Make sure to add a unique key
                         name={item.name}
                         expiryDate={item.expiryDate}
                         Item={item.tag}
@@ -77,7 +90,7 @@ const Profile = () => {
                         mobile={item.providerId.mobile}
                         id={item._id}
                     />
-                ))};
+                ))}
             </div>
         </div>
     );
