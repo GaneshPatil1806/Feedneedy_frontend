@@ -2,7 +2,7 @@
   "name": "feedneedy",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://feedneedy-4s1k.onrender.com/",
+  "proxy": "https://feedneedy-4s1k.onrender.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
