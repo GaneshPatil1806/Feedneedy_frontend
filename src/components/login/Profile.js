@@ -18,38 +18,28 @@ const Profile = () => {
                 setData1(responseData);
                 setError(null);
                 console.log(responseData);
-            } else {
-                // Handle non-ok response status
-                setError(`Failed to fetch data. Status: ${response.status}`);
             }
         } catch (error) {
             setError(error.message);
-            console.error(error);
+            console.log(error);
         }
     };
 
     return (
         <div className="profile">
-            {error && (
-                <div className="error-message">
-                    <p>Error: {error}</p>
-                </div>
-            )}
             <div className="image">
                 <img src={logo} alt="Profile" />
             </div>
             <div className="card-struct">
                 <h5 className="card-title">Profile</h5>
-                {!error && (
-                    <p>
-                        Name: {data1.name} <br />
-                        <hr />
-                        Mobile: {data1.mobile} <br />
-                        <hr />
-                        Gmail: {data1.email} <br />
-                        <hr />
-                    </p>
-                )}
+                <p>
+                    Name: {data1.name} <br />
+                    <hr />
+                    Mobile: {data1.mobile} <br />
+                    <hr />
+                    Gmail: {data1.email} <br />
+                    <hr />
+                </p>
             </div>
         </div>
     );

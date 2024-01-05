@@ -7,7 +7,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useEffect } from 'react';
 
-export default function RD() {
+export default function RD(props) {
   useEffect(()=>{
     AOS.init();
   },[])

@@ -4,14 +4,12 @@ import './Navbar.css';
 
 const NavBar = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => {
   const navigate = useNavigate();
-  const items = JSON.parse(localStorage.getItem('token'));
-  
+
   function Logout() {
     fetch("/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${items}`
       },
     });
     setisRLoggedIn(false);
@@ -24,7 +22,7 @@ const NavBar = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => 
       <nav className="navbar fixed-top navbar-expand-lg navbar-dark">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            Food Donation
+            FeedNeedy
           </Link>
           <button
             className="navbar-toggler"

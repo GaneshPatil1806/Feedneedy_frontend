@@ -1,15 +1,15 @@
-import Donation from './components/donate/Donation';
-import RegisterR from './components/login/register/RegisterR';
-import RegisterD from './components/login/register/RegisterD';
+import Donation from './components/donate/Donation'
+import RegisterR from './components/login/register/RegisterR'
+import RegisterD from './components/login/register/RegisterD'
 import Profile from './components/login/Profile';
 import Profile2 from './components/login/Profile2';
-import LoginR from './components/login/LoginR';
-import LoginD from './components/login/LoginD';
+import LoginR from './components/login/LoginR'
+import LoginD from './components/login/LoginD'
 import NavBar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import React from 'react';
-import Receive from './components/receive/Receive';
-import Success from './components/success/Success';
+import Receive from './components/receive/Receive'
+import Success from './components/success/Success'
 import { useState } from 'react';
 import './App.css';
 
