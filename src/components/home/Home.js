@@ -42,10 +42,6 @@ const Home = () => {
             <h3>Atharva Litake</h3>
             <p>UI AND UX</p>
             <div class="icons">
-              <a href=""><i class="fa-brands fa-twitter"></i></a>
-              <a href=""><i class="fa-brands fa-linkedin"></i></a>
-              <a href=""><i class="fa-brands fa-github"></i></a>
-              <a href=""><i class="fa-brands fa-facebook"></i></a>
             </div>
         </div>
         <div class="card" >
@@ -55,10 +51,6 @@ const Home = () => {
             <h3>Ganesh Patil</h3>
             <p>FRONTEND DEVELOPER</p>
             <div class="icons">
-              <a href=""><i class="fa-brands fa-twitter"></i></a>
-              <a href=""><i class="fa-brands fa-linkedin"></i></a>
-              <a href=""><i class="fa-brands fa-github"></i></a>
-              <a href=""><i class="fa-brands fa-facebook"></i></a>
             </div>
         </div>
         <div class="card" >
@@ -68,10 +60,6 @@ const Home = () => {
             <h3>Vishal Kuwar</h3>
             <p>FRONTEND DEVELOPER</p>
             <div class="icons">
-              <a href=""><i class="fa-brands fa-twitter"></i></a>
-              <a href=""><i class="fa-brands fa-linkedin"></i></a>
-              <a href=""><i class="fa-brands fa-github"></i></a>
-              <a href=""><i class="fa-brands fa-facebook"></i></a>
             </div>
         </div>
         </div>
@@ -83,10 +71,6 @@ const Home = () => {
             <h3>Pranav Jaju</h3>
             <p>BACKEND DEVELOPER</p>
             <div class="icons">
-              <a href=""><i class="fa-brands fa-twitter"></i></a>
-              <a href=""><i class="fa-brands fa-linkedin"></i></a>
-              <a href=""><i class="fa-brands fa-github"></i></a>
-              <a href=""><i class="fa-brands fa-facebook"></i></a>
             </div>
         </div>
         <div class="card" >
@@ -96,10 +80,6 @@ const Home = () => {
             <h3>Mihir Deshpande</h3>
             <p>BACKEND DEVELOPER</p>
             <div class="icons">
-              <a href=""><i class="fa-brands fa-twitter"></i></a>
-              <a href=""><i class="fa-brands fa-linkedin"></i></a>
-              <a href=""><i class="fa-brands fa-github"></i></a>
-              <a href=""><i class="fa-brands fa-facebook"></i></a>
             </div>
         </div>
         </div>
