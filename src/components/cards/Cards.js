@@ -5,7 +5,7 @@ function Cards(props) {
   let { name, quantity, expiryDate, Item, shop, add, mobile,email } = props;
 
   function handleAccept(){
-    fetch(`/mail/${shop}/${email}/${name}`, {
+    fetch(`https://pbl2023.onrender.com/mail/${shop}/${email}/${name}`, {
 
       method: 'POST',
       headers: {

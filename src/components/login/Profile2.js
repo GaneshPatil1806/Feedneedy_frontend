@@ -15,7 +15,7 @@ const Profile = () => {
 
     const fetchData1 = async () => {
         try {
-            const response = await fetch(`/getProfile`);
+            const response = await fetch(`https://pbl2023.onrender.com/getProfile`);
             
             if (response.ok) {
                 const responseData = await response.json();

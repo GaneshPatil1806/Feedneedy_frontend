@@ -6,7 +6,7 @@ const NavBar = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => 
   const navigate = useNavigate();
 
   function Logout() {
-    fetch("/logout", {
+    fetch("https://pbl2023.onrender.com/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -17,9 +17,9 @@ export default function Receive() {
       try {
         let response;
         if(searchTerm === '') {
-          response = await fetch(`/find`);
+          response = await fetch(`https://pbl2023.onrender.com/find`);
         } else {
-          response = await fetch(`/find/${searchTerm}`);
+          response = await fetch(`https://pbl2023.onrender.com/find/${searchTerm}`);
         }
   
         if (response.ok) {

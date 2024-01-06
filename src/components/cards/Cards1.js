@@ -6,7 +6,7 @@ function Cards1(props) {
 
   const handleDelete = (e) => {
     e.preventDefault();
-    fetch(`/DeleteFood/${id}`, {
+    fetch(`https://pbl2023.onrender.com/DeleteFood/${id}`, {
 
       method: 'DELETE',
       headers: {

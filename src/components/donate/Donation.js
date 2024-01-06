@@ -31,7 +31,7 @@ const Donation = () => {
     try {
       const token = localStorage.getItem('token');
      // console.log("hwre not getting",token);
-      const response = await fetch(`/SeeItems`, {
+      const response = await fetch(`https://pbl2023.onrender.com/SeeItems`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -70,7 +70,7 @@ const Donation = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/AddItem', {
+      const response = await fetch('https://pbl2023.onrender.com/AddItem', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

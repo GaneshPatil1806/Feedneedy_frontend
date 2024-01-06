@@ -89,7 +89,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("/registerD", {
+        const response = await fetch("https://pbl2023.onrender.com/registerD", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
     }
 
     if(isRLoggedIn){
-        fetch("/logout", {
+        fetch("https://pbl2023.onrender.com/logout", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
