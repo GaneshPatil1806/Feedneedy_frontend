@@ -40,7 +40,7 @@ const LoginD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) =>
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("/loginD", {
+        const response = await fetch("/api/loginD", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
