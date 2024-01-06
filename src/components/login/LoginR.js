@@ -68,10 +68,12 @@ const LoginR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => 
         });
         if (response.ok) {
           const data = await response.json();
+          const token = data.token;
           if (data.error) {
             throw new Error(data.error);
           } else {
             setisRLoggedIn(true);
+            localStorage.setItem('token', token);
             navigate("/receive");
           }
         } else {

@@ -27,10 +27,16 @@ const Donation = () => {
     fetchData();
   }, []);
 
-
   const fetchData = async () => {
     try {
-      const response = await fetch(`/SeeItems`);
+      const token = localStorage.getItem('token');
+     // console.log("hwre not getting",token);
+      const response = await fetch(`/SeeItems`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
       if (response.ok) {
         const responseData = await response.json();
         setData(responseData);
@@ -44,44 +50,47 @@ const Donation = () => {
       console.log(error);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Check for errors
     if (user.quantity <= 0) {
       setError('Quantity must be a positive number');
       return;
     }
-  
+
     const currentDate = new Date();
     const selectedDate = new Date(user.expiryDate);
-  
+
     if (selectedDate <= currentDate) {
       setError('Expiry date should be in the future');
       return;
     }
-  
+
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch('/AddItem', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(user),
       });
-  
+
+      console.log(response);
+
       if (!response.ok) {
         throw new Error('Error donating food');
       }
-  
+
       fetchData();
       navigate('/success');
     } catch (error) {
       setError(error.message);
     }
   };
-  
 
   return (
     <div className="main_container">
@@ -139,11 +148,11 @@ const Donation = () => {
                 placeholder="e.g.Curry,Chapati"
                 onChange={changeHandler}
               />
-               <h>{error && <p className="error-message">{error}</p>}</h>
+              <h>{error && <p className="error-message">{error}</p>}</h>
             </div>
-              <button className="submit-btn1" type="submit" onClick={handleSubmit}>
-                Submit &nbsp;<i class="fa-solid fa-thumbs-up"></i>
-              </button>
+            <button className="submit-btn1" type="submit" onClick={handleSubmit}>
+              Submit &nbsp;<i class="fa-solid fa-thumbs-up"></i>
+            </button>
           </form>
         </div>
       </div>
@@ -154,19 +163,19 @@ const Donation = () => {
         <div className="prev-donations">
         </div>
       </div >
-     <div className="cards-content">
-          {data.map((item) => (
-            <Cards1 name={item.name}
-              expiryDate={item.expiryDate}
-              Item={item.tag}
-              shop={item.providerId.name}
-              quantity={item.quantity}
-              add={item.providerId.address}
-              mobile={item.providerId.mobile}
-              id={item._id}
-            />
-          ))}
-        </div>
+      <div className="cards-content">
+        {data.map((item) => (
+          <Cards1 name={item.name}
+            expiryDate={item.expiryDate}
+            Item={item.tag}
+            shop={item.providerId.name}
+            quantity={item.quantity}
+            add={item.providerId.address}
+            mobile={item.providerId.mobile}
+            id={item._id}
+          />
+        ))}
+      </div>
 
     </div>
   );

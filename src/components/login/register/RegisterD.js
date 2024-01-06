@@ -98,7 +98,12 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
         });
 
         if (response.ok) {
-          await response.json();
+          const data = await response.json();
+          const token = data.token;
+          if (data.error) {
+            throw new Error(data.error);
+          }
+          localStorage.setItem('token', token);
           setisDLoggedIn(true);
           navigate("/donate");
         } else {
