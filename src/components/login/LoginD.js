@@ -42,6 +42,7 @@ const LoginD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) =>
       try {
         const response = await fetch("https://pbl2023.onrender.com/loginD", {
           method: "POST",
+          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
@@ -77,6 +78,7 @@ const LoginD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) =>
     if(isRLoggedIn){
       fetch("https://pbl2023.onrender.com/logout", {
         method: "POST",
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },

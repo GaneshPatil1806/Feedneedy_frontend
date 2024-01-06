@@ -8,6 +8,7 @@ const NavBar = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => 
   function Logout() {
     fetch("https://pbl2023.onrender.com/logout", {
       method: "POST",
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },

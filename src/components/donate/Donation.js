@@ -32,6 +32,7 @@ const Donation = () => {
       const token = localStorage.getItem('token');
      // console.log("hwre not getting",token);
       const response = await fetch(`https://pbl2023.onrender.com/SeeItems`, {
+        credentials: 'include',
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -72,6 +73,7 @@ const Donation = () => {
       const token = localStorage.getItem('token');
       const response = await fetch('https://pbl2023.onrender.com/AddItem', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
