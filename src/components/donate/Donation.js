@@ -79,9 +79,10 @@ const Donation = () => {
       setError(error.message);
     }
   };
- console.log(data);
+
+ 
   return (
-    <div className="main_container">
+    <div className="main_container mt-5">
       <div className="DonationContainer">
         <div className="logo-section">
           <img src={logo} alt="..." />

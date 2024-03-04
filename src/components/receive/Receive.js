@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cards from '../cards/Cards';
 import './Receive.css';
+import appVars from '../../config/config';
 
 export default function Receive() {
   const [data, setData] = useState([]);
@@ -17,9 +18,9 @@ export default function Receive() {
       try {
         let response;
         if(searchTerm === '') {
-          response = await fetch(`https://pbl2023.onrender.com/find`);
+          response = await fetch(`${appVars.backUrl}/find`);
         } else {
-          response = await fetch(`https://pbl2023.onrender.com/find/${searchTerm}`);
+          response = await fetch(`${appVars.backUrl}/find/${searchTerm}`);
         }
   
         if (response.ok) {
@@ -27,7 +28,6 @@ export default function Receive() {
           const jsonData = JSON.parse(responseData);
           setData(jsonData);
           setError(null);
-          console.log(jsonData);
         } else {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
         }
@@ -41,8 +41,8 @@ export default function Receive() {
 
   return (
     <div className="receive_page">
-      <div className='search'>
-        <div className="search_input">
+      <div className='search search_input'>
+        <div className="search_input mt-4">
           <input 
             type="search"
             placeholder='Search Here' 
@@ -60,7 +60,7 @@ export default function Receive() {
         ) : (
           data.map((item) => (
             <Cards
-              key={item._id} // Make sure to add a unique key
+              key={item._id}
               name={item.name}
               expiryDate={item.expiryDate}
               Item={item.tag}

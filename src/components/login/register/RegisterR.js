@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Register.css";
 import { useNavigate, NavLink } from "react-router-dom";
+import useUser, { UserContext } from "../../../context/UserContext";
+import appVars from "../../../config/config";
 
-const RegisterR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => {
+const RegisterR = () => {
     const navigate = useNavigate();
     const [formErrors, setFormErrors] = useState({});
-    const [user, setUserDetails] = useState({
+    const [userDetails, setUserDetails] = useState({
         name: "",
         email: "",
         mobile: "",
@@ -18,11 +20,12 @@ const RegisterR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) 
     const changeHandler = (e) => {
         const { name, value } = e.target;
         setUserDetails({
-            ...user,
+            ...userDetails,
             [name]: value,
         });
     };
 
+    const {user,setUser} = useUser();
     const validateForm = (values) => {
         const errors = {};
         const regex = /^[^\s+@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -66,8 +69,8 @@ const RegisterR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) 
         return new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    setUserDetails((prevUser) => ({
-                        ...prevUser,
+                    setUserDetails((prevuserDetails) => ({
+                        ...prevuserDetails,
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                     }));
@@ -83,29 +86,30 @@ const RegisterR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) 
     const signupHandler = async (e) => {
         e.preventDefault();
         await getLocation();
-        const errors = validateForm(user);
+        const errors = validateForm(userDetails);
         setFormErrors(errors);
 
         if (Object.keys(errors).length === 0) {
             try {
-                const response = await fetch("https://pbl2023.onrender.com/registerR", {
+                const response = await fetch(`${appVars.backUrl}/registerR`, {
                     method: "POST",
                     credentials: 'include',
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(user),
+                    body: JSON.stringify(userDetails),
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    const token = data.token;
                     if (data.error) {
-                      throw new Error(data.error);
+                        throw new Error(data.error);
                     }
-                    localStorage.setItem('token', token);
-                    setisRLoggedIn(true);
-                    navigate("/receive");
+                    else{
+                        localStorage.setItem('user', JSON.stringify({ isLoggedIn: 'R', token: data.token }));
+                        setUser({ isLoggedIn: 'R', token: data.token });
+                        navigate("/receive");
+                    }
                 } else {
                     const errorData = await response.json();
                     throw new Error(errorData.error);
@@ -116,91 +120,70 @@ const RegisterR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) 
         }
     };
 
-    useEffect(() => {
-        if (isRLoggedIn) {
-          navigate("/receive");
-        }
-    
-        if(isDLoggedIn){
-          fetch("https://pbl2023.onrender.com/logout", {
-            method: "POST",
-            credentials: 'include',
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          setisDLoggedIn(false);
-          window.alert("You have been logged out Donater!");
-          navigate("/loginR");
-        }
-      }, [isRLoggedIn,isDLoggedIn,setisDLoggedIn, navigate]);
-
     return (
-        <>
-            {!isRLoggedIn && (
-                <div className="register_f">
-                    <div className="RegisterContainer">
-                        <div className="register_form">
-                            <form autoComplete="off">
-                                <h1>Create your account</h1>
-                                {formErrors.backendError && <p className="errors error">{formErrors.backendError}</p>}
-                                <input
-                                    type="text"
-                                    name="name"
-                                    id="name"
-                                    placeholder="Name"
-                                    onChange={changeHandler}
-                                    value={user.name}
-                                />
-                                 <p className="errors name">{formErrors.name}</p>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    placeholder="Email"
-                                    onChange={changeHandler}
-                                    value={user.email}
-                                />
-                                <p className="errors email">{formErrors.email}</p>
-                                <input
-                                    type="text"
-                                    name="mobile"
-                                    id="mobile"
-                                    placeholder="Mobile Number"
-                                    onChange={changeHandler}
-                                    value={user.mobile}
-                                />
-                                 <p className="errors phone">{formErrors.mobile}</p>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="Password"
-                                    onChange={changeHandler}
-                                    value={user.password}
-                                />
-                                <p className="errors pass">{formErrors.password}</p>
-                                <input
-                                    type="password"
-                                    name="cpassword"
-                                    id="cpassword"
-                                    placeholder="Confirm Password"
-                                    onChange={changeHandler}
-                                    value={user.cpassword}
-                                />
-                                <p className="errors pass">{formErrors.cpassword}</p>
-                                <button type="submit" onClick={signupHandler}>
-                                    Register &nbsp;<i className="fa-sharp fa-solid fa-address-card"></i>
-                                </button>
-                            </form>
-                            <NavLink to="/loginR" className="link_next">
-                                Already registered? Login
-                            </NavLink>
-                        </div>
-                    </div>
+        <UserContext.Provider value={user}>
+        <div className="register_f">
+            <div className="RegisterContainer">
+                <div className="register_form">
+                    <form autoComplete="off">
+                        <h1>Create your account</h1>
+                        {formErrors.backendError && <p className="errors error">{formErrors.backendError}</p>}
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            placeholder="Name"
+                            onChange={changeHandler}
+                            value={userDetails.name}
+                        />
+                        <p className="errors name">{formErrors.name}</p>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="Email"
+                            onChange={changeHandler}
+                            value={userDetails.email}
+                        />
+                        <p className="errors email">{formErrors.email}</p>
+                        <input
+                            type="text"
+                            name="mobile"
+                            id="mobile"
+                            placeholder="Mobile Number"
+                            onChange={changeHandler}
+                            value={userDetails.mobile}
+                        />
+                        <p className="errors phone">{formErrors.mobile}</p>
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="Password"
+                            onChange={changeHandler}
+                            value={userDetails.password}
+                        />
+                        <p className="errors pass">{formErrors.password}</p>
+                        <input
+                            type="password"
+                            name="cpassword"
+                            id="cpassword"
+                            placeholder="Confirm Password"
+                            onChange={changeHandler}
+                            value={userDetails.cpassword}
+                        />
+                        <p className="errors pass">{formErrors.cpassword}</p>
+                        <button type="submit" onClick={signupHandler}>
+                            Register &nbsp;<i className="fa-sharp fa-solid fa-address-card"></i>
+                        </button>
+                    </form>
+                    <NavLink to="/loginR" className="link_next">
+                        Already registered? Login
+                    </NavLink>
                 </div>
-            )}
-        </>
+            </div>
+        </div>
+        </UserContext.Provider>
     );
 };
 

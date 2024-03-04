@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from "react";
 import './Profile.css';
-import logo from '../images/itachi.jpg';
-import Cards1 from "../cards/Cards1";
+import appVars from "../../config/config";
+import useUser from "../../context/UserContext";
+import axios from "axios";
 
 const Profile = () => {
-    const [data, setData] = useState([]);
-    const [data1, setData1] = useState([]);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        fetchData();
-        fetchData1();
-    }, []);
+    const [data1, setData] = useState([]);
+    const [error, setError] = useState(null);
+    const {user} = useUser();
 
     const fetchData1 = async () => {
         try {
-            const response = await fetch(`https://pbl2023.onrender.com/getProfile`);
-            
-            if (response.ok) {
-                const responseData = await response.json();
-                setData1(responseData);
-                setError(null);
-                console.log(responseData);
-            } else {
-                setError(`Error: ${response.status} - ${response.statusText}`);
-                console.error(`Error: ${response.status} - ${response.statusText}`);
+            if(user){
+                axios.get(`${appVars.backUrl}/getProfile`, {
+                    headers: {
+                      'Authorization': `Bearer ${user?.token}`,
+                    },
+                    withCredentials: true,
+                  })
+                    .then((res) =>setData(res.data)) 
+                    .catch(() => {
+                      setError('Failed to fetch data. Please try again.');
+                    });
             }
         } catch (error) {
             setError(`Error: ${error.message}`);
@@ -32,36 +30,36 @@ const Profile = () => {
         }
     };
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch(`/SeeItems`);
+    useEffect(() => {
+        fetchData1();
+    }, []);
+
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await fetch(`/SeeItems`);
             
-            if (response.ok) {
-                const responseData = await response.json();
-                setData(responseData);
-                setError(null);
-                console.log(responseData);
-            } else {
-                setError(`Error: ${response.status} - ${response.statusText}`);
-                console.error(`Error: ${response.status} - ${response.statusText}`);
-            }
-        } catch (error) {
-            setError(`Error: ${error.message}`);
-            console.error(`Error: ${error.message}`);
-        }
-    };
+    //         if (response.ok) {
+    //             const responseData = await response.json();
+    //             setData(responseData);
+    //             setError(null);
+    //             console.log(responseData);
+    //         } else {
+    //             setError(`Error: ${response.status} - ${response.statusText}`);
+    //             console.error(`Error: ${response.status} - ${response.statusText}`);
+    //         }
+    //     } catch (error) {
+    //         setError(`Error: ${error.message}`);
+    //         console.error(`Error: ${error.message}`);
+    //     }
+    // };
 
     return (
-        <div className="profile">
-            <div className="image">
-                <img src={logo} alt="Profile" />
-            </div>
-            <div className="card-struct">
+            <div className="profile">
                 <h5 className="card-title">Profile</h5>
                 {error ? (
                     <p>Error loading profile data: {error}</p>
                 ) : (
-                    <p>
+                    <div className="card">
                         Name: {data1.name} <br />
                         <hr />
                         Address: {data1.address} <br />
@@ -70,29 +68,9 @@ const Profile = () => {
                         <hr />
                         Gmail: {data1.email} <br />
                         <hr />
-                    </p>
+                    </div>
                 )}
             </div>
-
-            <div className="heading-active">
-                <h1>ACTIVE DONATIONS</h1>
-            </div>
-            <div className="cards-content">
-                {data.map((item) => (
-                    <Cards1
-                        key={item._id} // Make sure to add a unique key
-                        name={item.name}
-                        expiryDate={item.expiryDate}
-                        Item={item.tag}
-                        shop={item.providerId.name}
-                        quantity={item.quantity}
-                        add={item.providerId.address}
-                        mobile={item.providerId.mobile}
-                        id={item._id}
-                    />
-                ))}
-            </div>
-        </div>
     );
 };
 

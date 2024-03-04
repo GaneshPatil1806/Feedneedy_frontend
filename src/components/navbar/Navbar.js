@@ -2,30 +2,44 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import appVars from '../../config/config';
+import useUser from '../../context/UserContext';
+import toast, { Toaster } from 'react-hot-toast';
 
-const NavBar = ({ isRLoggedIn,setisRLoggedIn,isDLoggedIn, setisDLoggedIn } ) => {
+const NavBar = () => {
   const navigate = useNavigate();
+  const { user,setUser } = useUser();
 
   function Logout() {
-    fetch(`${appVars.backUrl}/logout`, {
+    let url = `${appVars.backUrl}/D/logout`;
+    if(user.isLoggedIn === 'R'){
+      url = `${appVars.backUrl}/R/logout`;
+    }
+
+    localStorage.removeItem('user');
+
+    fetch(url, {
       method: "POST",
-      credentials: 'include',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user?.token}`
       },
-    });
-    setisRLoggedIn(false);
-    setisDLoggedIn(false);
-    navigate("/");
+    }).then((res) => {
+      toast.success("Logged Out Successfully!");
+      setUser()
+      navigate('/')
+    }).catch(() => {
+      toast.error("LogOut Failed!")
+    })
   }
 
   return (
-    <div>
+    <>
       <nav className="navbar fixed-top navbar-expand-lg navbar-dark">
+      <Toaster/>
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <span className="navbar-brand" to="/">
             FeedNeedy
-          </Link>
+          </span>
           <button
             className="navbar-toggler"
             type="button"
@@ -45,39 +59,38 @@ const NavBar = ({ isRLoggedIn,setisRLoggedIn,isDLoggedIn, setisDLoggedIn } ) => 
                 </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link active" href="/">
+                <a className="nav-link active" href="/descript">
                   About
                 </a>
               </li>
               <li className="nav-item">
-                {isRLoggedIn?(<>
+                { user && user.isLoggedIn === 'R' &&
                   <Link className="nav-link active" to="/profile">
-                  Profile
-                </Link></>):<><Link className="nav-link active" to="/profile2">
-                  Profile
-                </Link></>}
+                    Profile
+                  </Link> } 
+
+                { user && user.isLoggedIn === 'D' && <Link className="nav-link active" to="/profile2">
+                    Profile
+                  </Link> }
               </li>
-              <li className="login">
-                  Login Info
-                <ul className="dropdown-menu">
-                  {(!isRLoggedIn && !isDLoggedIn) ? (
-                    <li>
-                      <a className="dropdown-item" href="#section2">Login</a>
-                    </li>
-                  ) : (
-                    <li>
-                      <button className="dropdown-item" type="button" onClick={Logout}>
-                        Logout
-                      </button>
-                    </li>
-                  )}
-                </ul>
+            </ul>
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                {user && user.token ? (
+                  <button type="button" className="btn btn-success" onClick={Logout}>
+                    Logout
+                  </button>
+                ) : (
+                  <button type="button" className="btn btn-success">
+                    Login
+                  </button>
+                )}
               </li>
             </ul>
           </div>
         </div>
       </nav>
-    </div>
+    </>
   );
 };
 

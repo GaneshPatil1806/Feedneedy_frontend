@@ -71,33 +71,22 @@ const LoginD = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (isDLoggedIn) {
-  //     navigate("/donate");
-  //   }
+  useEffect(() => {
+    if (user && user.isLoggedIn === 'D') {
+      navigate("/donate");
+    }
 
-  //   if (isRLoggedIn) {
-  //     fetch(`${appVars.backUrl}/logout`, {
-  //       method: "POST",
-  //       credentials: 'include',
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     setisRLoggedIn(false);
-  //     window.alert("You have been logged out Receiver!");
-  //     navigate("/loginD");
-  //   }
-  // }, [isDLoggedIn, isRLoggedIn, setisRLoggedIn, navigate]);
-;
+    if (user && user.isLoggedIn === 'R') {
+        localStorage.removeItem('user');
+        setUser({});
+        window.alert("You have been logged out Receiver!");
+        navigate("/loginD");
+    }
+  }, [user,navigate,setUser]);
+  
   return (
     <UserContext.Provider value={user}>
       <div className="login-box">
-        {!user && user.isLoggedIn !== 'D' ? (
-          null // Render nothing when the userDetails is already logged in
-        ) : (
-          <>
             <div className="login-image">
               <img src={Donorlog} alt="" />
             </div>
@@ -144,8 +133,6 @@ const LoginD = () => {
                 </div>
               </form>
             </div>
-          </>
-        )}
       </div>
     </UserContext.Provider>
   );

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Register.css";
 import { useNavigate, NavLink } from "react-router-dom";
 import useUser, { UserContext } from "../../../context/UserContext";
 import appVars from "../../../config/config";
 import toast, { Toaster } from 'react-hot-toast';
 
-const RegisterD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) => {
+const RegisterD = () => {
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
   const [userDetails, setUserDetails] = useState({
@@ -125,25 +125,6 @@ const RegisterD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn })
       }
     }
   };
-
-  // useEffect(() => {
-  //   if (isDLoggedIn) {
-  //     navigate("/donate");
-  //   }
-
-  //   if(isRLoggedIn){
-  //       fetch("https://pbl2023.onrender.com/logout", {
-  //         method: "POST",
-  //         credentials: 'include',
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-  //       setisRLoggedIn(false);
-  //       window.alert("You have been logged out Receiver!");
-  //       navigate("/loginD");
-  //     }
-  // }, [isDLoggedIn,isRLoggedIn,setisRLoggedIn,navigate]);
 
   return (
     <UserContext.Provider value={user}>

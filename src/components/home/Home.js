@@ -28,10 +28,6 @@ const Home = () => {
       <div className="container2" data-aos="flip" id="section2">
         <RD/>
       </div>
-
-      <div className="container3" id="section3">
-        <Description />
-      </div>
       {/* <div className="team-section">
         <h1>OUR TEAM </h1>
         <div className="team_members">

@@ -4,7 +4,7 @@ import "./Description.css";
 
 export default function Description() {
   return (
-    <div className="aboutUs-section" id="abt">
+    <div className="aboutUs-section mt-5 " id="abt">
       <div className="logo-section">
         <img src={logo} className="logo logo2" alt="..." />
       </div>

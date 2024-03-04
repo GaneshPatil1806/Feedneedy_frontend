@@ -23,7 +23,10 @@ import { useEffect } from 'react';
 
 
 function App() {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    token:'',
+    isLoggedIn:''
+  });
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -31,13 +34,13 @@ function App() {
       setUser(JSON.parse(user));
     }
   }, []);
-    
+
   return (
     <UserContext.Provider value={{user,setUser}}>
       <Router>
         <NavBar />
         <Routes>
-          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/" element={<Home/>}></Route>
           <Route exact path="/donate" element={<Donation/>}></Route>
           <Route exact path="/descript" element={<Description/>}></Route>
           <Route exact path="/receive" element={<Receive/>}></Route>
