@@ -12,35 +12,46 @@ import Receive from './components/receive/Receive'
 import Success from './components/success/Success'
 import { useState } from 'react';
 import './App.css';
-
+import { UserContext } from './context/UserContext'
+import Description from './components/description/Description';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom"
-import Description from './components/description/Description';
+import { useEffect } from 'react';
+
 
 function App() {
-  const [isRLoggedIn, setisRLoggedIn] = useState(false);
-  const [isDLoggedIn, setisDLoggedIn] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  }, []);
+    
   return (
-    <Router>
-      <NavBar isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>
-      <Routes>
-        <Route exact path="/" element={<Home/>}></Route>
-        <Route exact path="/donate" element={<Donation/>}></Route>
-        <Route exact path="/descript" element={<Description/>}></Route>
-        <Route exact path="/receive" element={<Receive/>}></Route>
-        <Route exact path="/success" element={<Success />}></Route>
-        <Route exact path="/loginR" element={<LoginR isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>}></Route>
-        <Route exact path="/loginD" element={<LoginD isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>}></Route>
-        <Route exact path="/registerR" element={<RegisterR isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>}></Route>
-        <Route exact path="/registerD" element={<RegisterD isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>}></Route>
-        <Route exact path="/success" element={<Success/>}></Route>
-        <Route exact path="/profile" element={<Profile isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>}></Route>
-        <Route exact path="/profile2" element={<Profile2 isRLoggedIn={isRLoggedIn} setisRLoggedIn={setisRLoggedIn} isDLoggedIn={isDLoggedIn} setisDLoggedIn={setisDLoggedIn}/>}></Route>
-      </Routes>
-    </Router>
+    <UserContext.Provider value={{user,setUser}}>
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/donate" element={<Donation/>}></Route>
+          <Route exact path="/descript" element={<Description/>}></Route>
+          <Route exact path="/receive" element={<Receive/>}></Route>
+          <Route exact path="/success" element={<Success/>}></Route>
+          <Route exact path="/loginR" element={<LoginR/>}></Route>
+          <Route exact path="/loginD" element={<LoginD/>}></Route>
+          <Route exact path="/registerR" element={<RegisterR/>}></Route>
+          <Route exact path="/registerD" element={<RegisterD/>}></Route>
+          <Route exact path="/success" element={<Success/>}></Route>
+          <Route exact path="/profile" element={<Profile/>}></Route>
+          <Route exact path="/profile2" element={<Profile2/>}></Route>
+        </Routes>
+      </Router>
+    </UserContext.Provider>
   );
 }
 

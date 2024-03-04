@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Login.css";
 import { useNavigate, NavLink } from "react-router-dom";
 import Rlog from "../images/Receiverlog.png";
+import appVars from "../../config/config";
 
 const LoginR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const LoginR = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => 
     }
 
     if(isDLoggedIn){
-      fetch("https://pbl2023.onrender.com/logout", {
+      fetch(`${appVars.backUrl}/logout`, {
         method: "POST",
         credentials: 'include',
         headers: {

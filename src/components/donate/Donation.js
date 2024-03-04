@@ -3,66 +3,55 @@ import "./Donation.css";
 import Cards1 from "../cards/Cards1";
 import logo from "../images/logo.png";
 import { useNavigate } from "react-router-dom";
+import useUser from "../../context/UserContext";
+import appVars from "../../config/config";
+import axios from "axios";
 
 const Donation = () => {
   const [data, setData] = useState([])
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [user, setUserDetails] = useState({
+  const [foodDetails, setfoodDetails] = useState({
     name: '',
     expiryDate: Date,
     quantity: Number,
     tag: '',
   })
+  const {user} = useUser();
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
-    setUserDetails({
-      ...user,
+    setfoodDetails({
+      ...foodDetails,
       [name]: value,
     });
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const token = localStorage.getItem('token');
-     // console.log("hwre not getting",token);
-      const response = await fetch(`https://pbl2023.onrender.com/SeeItems`, {
-        credentials: 'include',
+    if (user) {
+      axios.get(`${appVars.backUrl}/SeeItems`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${user?.token}`,
         },
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        setData(responseData);
-        setError(null);
-        console.log(responseData);
-      } else {
-        throw new Error('Error fetching data');
-      }
-    } catch (error) {
-      setError('Failed to fetch data. Please try again.');
-      console.log(error);
+        withCredentials: true,
+      })
+        .then((res) =>setData(res.data)) 
+        .catch(() => {
+          setError('Failed to fetch data. Please try again.');
+        });
     }
-  };
+  }, [user]);  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check for errors
-    if (user.quantity <= 0) {
+    if (foodDetails.quantity <= 0) {
       setError('Quantity must be a positive number');
       return;
     }
 
     const currentDate = new Date();
-    const selectedDate = new Date(user.expiryDate);
+    const selectedDate = new Date(foodDetails.expiryDate);
 
     if (selectedDate <= currentDate) {
       setError('Expiry date should be in the future');
@@ -70,30 +59,27 @@ const Donation = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('https://pbl2023.onrender.com/AddItem', {
+      const token = user.token;
+      const response = await fetch(`${appVars.backUrl}/AddItem`, {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(foodDetails),
       });
-
-      console.log(response);
 
       if (!response.ok) {
         throw new Error('Error donating food');
+      }else{
+        navigate('/success');
       }
-
-      fetchData();
-      navigate('/success');
     } catch (error) {
       setError(error.message);
     }
   };
-
+ console.log(data);
   return (
     <div className="main_container">
       <div className="DonationContainer">
@@ -111,9 +97,10 @@ const Donation = () => {
                 type="text"
                 name="name"
                 id="name"
-                value={user.name}
+                value={foodDetails.name}
                 placeholder="Food name"
                 onChange={changeHandler}
+                required={true}
               />
             </div>
             <div className="input_group">
@@ -123,8 +110,9 @@ const Donation = () => {
                 type="Date"
                 name="expiryDate"
                 id="expiryDate"
-                value={user.expiryDate}
+                value={foodDetails.expiryDate}
                 onChange={changeHandler}
+                required={true}
               />
             </div>
             <div className="input_group">
@@ -134,9 +122,10 @@ const Donation = () => {
                 type="Number"
                 name="quantity"
                 id="quantity"
-                value={user.quantity}
+                value={foodDetails.quantity}
                 placeholder="No of People it can feed"
                 onChange={changeHandler}
+                required={true}
               />
             </div>
             <div className="input_group">
@@ -146,9 +135,10 @@ const Donation = () => {
                 type="text"
                 name="tag"
                 id="tag"
-                value={user.tag}
+                value={foodDetails.tag}
                 placeholder="e.g.Curry,Chapati"
                 onChange={changeHandler}
+                required={true}
               />
               <h>{error && <p className="error-message">{error}</p>}</h>
             </div>
@@ -166,7 +156,7 @@ const Donation = () => {
         </div>
       </div >
       <div className="cards-content">
-        {data.map((item) => (
+        {data && data.map((item) => (
           <Cards1 name={item.name}
             expiryDate={item.expiryDate}
             Item={item.tag}

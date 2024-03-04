@@ -2,19 +2,22 @@ import React, { useState, useEffect } from "react";
 import './Login.css'
 import { useNavigate, NavLink } from "react-router-dom";
 import Donorlog from "../images/Donorlog.png";
+import appVars from "../../config/config";
+import useUser, { UserContext } from "../../context/UserContext";
 
-const LoginD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) => {
+const LoginD = () => {
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
-  const [user, setUserDetails] = useState({
+  const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
   });
+  const { setUser, user } = useUser();
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setUserDetails({
-      ...user,
+      ...userDetails,
       [name]: value,
     });
   };
@@ -35,29 +38,27 @@ const LoginD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) =>
 
   const loginHandler = async (e) => {
     e.preventDefault();
-    const errors = validateForm(user);
+    const errors = validateForm(userDetails);
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("https://pbl2023.onrender.com/loginD", {
+        const response = await fetch(`${appVars.backUrl}/loginD`, {
           method: "POST",
           credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(userDetails),
         });
+
         if (response.ok) {
           const data = await response.json();
-          const token = data.token;
-          console.log("inside login ",token);
           if (data.error) {
             throw new Error(data.error);
           } else {
-            setisDLoggedIn(true);
-            // Store the token in localStorage or a secure cookie
-            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify({ isLoggedIn: 'D', token: data.token }));
+            setUser({ isLoggedIn: 'D', token: data.token });
             navigate("/donate");
           }
         } else {
@@ -70,81 +71,83 @@ const LoginD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) =>
     }
   };
 
-  useEffect(() => {
-    if (isDLoggedIn) {
-      navigate("/donate");
-    }
+  // useEffect(() => {
+  //   if (isDLoggedIn) {
+  //     navigate("/donate");
+  //   }
 
-    if(isRLoggedIn){
-      fetch("https://pbl2023.onrender.com/logout", {
-        method: "POST",
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      
-      setisRLoggedIn(false);
-      window.alert("You have been logged out Receiver!");
-      navigate("/loginD");
-    }
-  }, [isDLoggedIn, isRLoggedIn, setisRLoggedIn, navigate]);
+  //   if (isRLoggedIn) {
+  //     fetch(`${appVars.backUrl}/logout`, {
+  //       method: "POST",
+  //       credentials: 'include',
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
 
+  //     setisRLoggedIn(false);
+  //     window.alert("You have been logged out Receiver!");
+  //     navigate("/loginD");
+  //   }
+  // }, [isDLoggedIn, isRLoggedIn, setisRLoggedIn, navigate]);
+;
   return (
-    <div className="login-box">
-      {!isDLoggedIn ? (
-        <>
-          <div className="login-image">
-            <img src={Donorlog} alt="" />
-          </div>
-          <div className="LoginContainer">
-            <form>
-              <h1>Login</h1>
-              {formErrors.backendError && (
-                <p className="error-message">{formErrors.backendError}</p>
-              )}
-              <label>
-                E-MAIL&nbsp;<i className="fa-solid fa-envelope"></i>
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email"
-                onChange={changeHandler}
-                value={user.email}
-              />
-              {formErrors.email && (
-                <p className="pass">{formErrors.email}</p>
-              )}
-              <label>
-                PASSWORD&nbsp;<i className="fa-solid fa-key"></i>
-              </label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-                onChange={changeHandler}
-                value={user.password}
-              />
-              <p className="password">{formErrors.password}</p>
-              <button type="submit" onClick={loginHandler}>
-                Login &nbsp;<i className="fa-solid fa-right-to-bracket"></i>
-              </button>{" "}
-              <br></br>
-              <div className="link_next">
-                <NavLink to="/registerD" className="link_next">
-                  Not yet registered? Register Now
-                </NavLink>
-              </div>
-            </form>
-          </div>
-        </>
-      ) : (
-        null // Render nothing when the user is already logged in
-      )}
-    </div>
+    <UserContext.Provider value={user}>
+      <div className="login-box">
+        {!user && user.isLoggedIn !== 'D' ? (
+          null // Render nothing when the userDetails is already logged in
+        ) : (
+          <>
+            <div className="login-image">
+              <img src={Donorlog} alt="" />
+            </div>
+            <div className="LoginContainer">
+              <form>
+                <h1>Login</h1>
+                {formErrors.backendError && (
+                  <p className="error-message">{formErrors.backendError}</p>
+                )}
+                <label>
+                  E-MAIL&nbsp;<i className="fa-solid fa-envelope"></i>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="Email"
+                  onChange={changeHandler}
+                  value={userDetails.email}
+                />
+                {formErrors.email && (
+                  <p className="pass">{formErrors.email}</p>
+                )}
+                <label>
+                  PASSWORD&nbsp;<i className="fa-solid fa-key"></i>
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="Password"
+                  onChange={changeHandler}
+                  value={userDetails.password}
+                />
+                <p className="password">{formErrors.password}</p>
+                <button type="submit" onClick={loginHandler}>
+                  Login &nbsp;<i className="fa-solid fa-right-to-bracket"></i>
+                </button>{" "}
+                <br></br>
+                <div className="link_next">
+                  <NavLink to="/registerD" className="link_next">
+                    Not yet registered? Register Now
+                  </NavLink>
+                </div>
+              </form>
+            </div>
+          </>
+        )}
+      </div>
+    </UserContext.Provider>
   );
 };
 

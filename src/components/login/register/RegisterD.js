@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./Register.css";
 import { useNavigate, NavLink } from "react-router-dom";
+import useUser, { UserContext } from "../../../context/UserContext";
+import appVars from "../../../config/config";
+import toast, { Toaster } from 'react-hot-toast';
 
-const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => {
+const RegisterD = ({ isRLoggedIn, setisRLoggedIn, isDLoggedIn, setisDLoggedIn }) => {
   const navigate = useNavigate();
   const [formErrors, setFormErrors] = useState({});
-  const [user, setUserDetails] = useState({
+  const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
     mobile: "",
@@ -15,11 +18,12 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
     latitude: 0,
     longitude: 0
   });
+  const { user, setUser } = useUser();
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setUserDetails({
-      ...user,
+      ...userDetails,
       [name]: value,
     });
   };
@@ -67,8 +71,8 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setUserDetails((prevUser) => ({
-            ...prevUser,
+          setUserDetails((prevuserDetails) => ({
+            ...prevuserDetails,
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           }));
@@ -84,32 +88,37 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
   const signupHandler = async (e) => {
     e.preventDefault();
     await getLocation();
-    const errors = validateForm(user);
+    const errors = validateForm(userDetails);
     setFormErrors(errors);
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await fetch("https://pbl2023.onrender.com/registerD", {
+        const response = await fetch(`${appVars.backUrl}/registerD`, {
           method: "POST",
           credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(userDetails),
         });
 
         if (response.ok) {
           const data = await response.json();
-          const token = data.token;
           if (data.error) {
             throw new Error(data.error);
           }
-          localStorage.setItem('token', token);
-          setisDLoggedIn(true);
-          navigate("/donate");
+          else {
+            toast.success('User registered successfully!')
+            localStorage.setItem('user', JSON.stringify({ isLoggedIn: 'D', token: data.token }));
+            setUser({ isLoggedIn: 'D', token: data.token });
+            setTimeout(() => {
+              navigate("/donate");
+            }, 1000);
+          }
+
         } else {
           const errorData = await response.json();
-          throw new Error(errorData.error);
+          toast.error(errorData.error);
         }
       } catch (error) {
         setFormErrors({ backendError: error.message });
@@ -117,29 +126,28 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
     }
   };
 
-  useEffect(() => {
-    if (isDLoggedIn) {
-      navigate("/donate");
-    }
+  // useEffect(() => {
+  //   if (isDLoggedIn) {
+  //     navigate("/donate");
+  //   }
 
-    if(isRLoggedIn){
-        fetch("https://pbl2023.onrender.com/logout", {
-          method: "POST",
-          credentials: 'include',
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        setisRLoggedIn(false);
-        window.alert("You have been logged out Receiver!");
-        navigate("/loginD");
-      }
-  }, [isDLoggedIn,isRLoggedIn,setisRLoggedIn,navigate]);
+  //   if(isRLoggedIn){
+  //       fetch("https://pbl2023.onrender.com/logout", {
+  //         method: "POST",
+  //         credentials: 'include',
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+  //       setisRLoggedIn(false);
+  //       window.alert("You have been logged out Receiver!");
+  //       navigate("/loginD");
+  //     }
+  // }, [isDLoggedIn,isRLoggedIn,setisRLoggedIn,navigate]);
 
   return (
-    <div>
-      {!isDLoggedIn && (
-        <div className="register_f">
+    <UserContext.Provider value={user}>
+      <div className="register_f">
           <div className="RegisterContainer">
             <div className="register_form">
               <form autoComplete="off">
@@ -152,7 +160,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
                   id="name"
                   placeholder="Name"
                   onChange={changeHandler}
-                  value={user.name}
+                  value={userDetails.name}
                 />
                 <p className="errors email">{formErrors.email}</p>
                 <input
@@ -161,7 +169,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
                   id="email"
                   placeholder="Email"
                   onChange={changeHandler}
-                  value={user.email}
+                  value={userDetails.email}
                 />
                 <p className="errors phone">{formErrors.mobile}</p>
                 <input
@@ -170,7 +178,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
                   id="mobile"
                   placeholder="Mobile Number"
                   onChange={changeHandler}
-                  value={user.mobile}
+                  value={userDetails.mobile}
                 />
                 <p className="errors pass">{formErrors.password}</p>
                 <input
@@ -179,7 +187,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
                   id="password"
                   placeholder="Password"
                   onChange={changeHandler}
-                  value={user.password}
+                  value={userDetails.password}
                 />
                 <p className="errors pass">{formErrors.cpassword}</p>
                 <input
@@ -188,7 +196,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
                   id="cpassword"
                   placeholder="Confirm Password"
                   onChange={changeHandler}
-                  value={user.cpassword}
+                  value={userDetails.cpassword}
                 />
                 <p className="address">{formErrors.address}</p>
                 <input
@@ -197,7 +205,7 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
                   id="address"
                   placeholder="Address"
                   onChange={changeHandler}
-                  value={user.address}
+                  value={userDetails.address}
                 />
                 <button type="submit" onClick={signupHandler}>
                   Register &nbsp;<i className="fa-sharp fa-solid fa-address-card"></i>
@@ -208,9 +216,9 @@ const RegisterD = ({isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) =
               </NavLink>
             </div>
           </div>
+          <Toaster />
         </div>
-      )}
-    </div>
+    </UserContext.Provider>
   );
 };
 

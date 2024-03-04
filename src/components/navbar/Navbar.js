@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
+import appVars from '../../config/config';
 
-const NavBar = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => {
+const NavBar = ({ isRLoggedIn,setisRLoggedIn,isDLoggedIn, setisDLoggedIn } ) => {
   const navigate = useNavigate();
 
   function Logout() {
-    fetch("https://pbl2023.onrender.com/logout", {
+    fetch(`${appVars.backUrl}/logout`, {
       method: "POST",
       credentials: 'include',
       headers: {
@@ -56,16 +57,8 @@ const NavBar = ({ isRLoggedIn, setisRLoggedIn,isDLoggedIn, setisDLoggedIn }) => 
                   Profile
                 </Link></>}
               </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle active"
-                  href="/h"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
+              <li className="login">
                   Login Info
-                </a>
                 <ul className="dropdown-menu">
                   {(!isRLoggedIn && !isDLoggedIn) ? (
                     <li>
