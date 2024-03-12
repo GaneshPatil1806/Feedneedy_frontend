@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./Donation.css";
 import Cards1 from "../cards/Cards1";
 import logo from "../images/logo.png";
-import { useNavigate } from "react-router-dom";
 import useUser from "../../context/UserContext";
 import appVars from "../../config/config";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Donation = () => {
   const [data, setData] = useState([])
-  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [foodDetails, setfoodDetails] = useState({
     name: '',
@@ -40,7 +39,7 @@ const Donation = () => {
           setError('Failed to fetch data. Please try again.');
         });
     }
-  }, [user]);  
+  }, [user,data]);  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -73,10 +72,10 @@ const Donation = () => {
       if (!response.ok) {
         throw new Error('Error donating food');
       }else{
-        navigate('/success');
+        toast.success('Food Donated Successfully!')
       }
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message || 'Error')
     }
   };
 

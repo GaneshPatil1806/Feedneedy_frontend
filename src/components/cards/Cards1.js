@@ -1,12 +1,14 @@
 import React from "react";
 import "./Cards.css";
+import appVars from "../../config/config";
+import axios from "axios";
 
 function Cards1(props) {
   let { name, quantity, expiryDate, Item, shop, add, mobile,id } = props;
 
   const handleDelete = (e) => {
     e.preventDefault();
-    fetch(`https://pbl2023.onrender.com/DeleteFood/${id}`, {
+    axios.delete(`${appVars.backUrl}/DeleteFood/${id}`, {
 
       method: 'DELETE',
       headers: {
@@ -14,7 +16,6 @@ function Cards1(props) {
       },
 
     })
-    window.location.reload();
   }
 
   const short=expiryDate.toString();
