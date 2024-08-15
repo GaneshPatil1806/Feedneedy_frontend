@@ -11,7 +11,6 @@ import React from 'react';
 import Receive from './components/receive/Receive'
 import Success from './components/success/Success'
 import { useState } from 'react';
-import './App.css';
 import { UserContext } from './context/UserContext'
 import Description from './components/description/Description';
 import {

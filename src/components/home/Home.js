@@ -6,11 +6,11 @@ import Description from '../description/Description'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import React, { useEffect } from 'react';
-// import mihir from "../images/mihir.jpg";
-// import atharva from "../images/atharva.jpg";
-// import ganesh from "../images/ganesh.jpg";
-// import vishal from "../images/vishal.jpg"
-// import jaju from "../images/jaju.jpg"
+import mihir from "../images/mihir.jpg";
+import atharva from "../images/atharva.jpg";
+import ganesh from "../images/ganesh.jpg";
+import vishal from "../images/vishal.jpg"
+import jaju from "../images/jaju.jpg"
 
 const Home = () => {
 
@@ -28,7 +28,7 @@ const Home = () => {
       <div className="container2" data-aos="flip" id="section2">
         <RD/>
       </div>
-      {/* <div className="team-section">
+      <div className="team-section">
         <h1>OUR TEAM </h1>
         <div className="team_members">
           <div className="card" >
@@ -79,7 +79,7 @@ const Home = () => {
             </div>
         </div>
         </div>
-      </div> */}
+      </div>
       <div className="container5">
         <Footer />
       </div>

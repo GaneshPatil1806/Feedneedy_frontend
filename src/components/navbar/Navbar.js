@@ -7,11 +7,22 @@ import toast, { Toaster } from 'react-hot-toast';
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const { user,setUser } = useUser();
+  const { user, setUser } = useUser();
+
+  function handleLoginClick() {
+    navigate('/'); // Navigate to the Home page
+
+    setTimeout(() => {
+      const section2 = document.getElementById("section2");
+      if (section2) {
+        section2.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 0); // Delay to ensure the page has navigated before attempting to scroll
+  }
 
   function Logout() {
     let url = `${appVars.backUrl}/D/logout`;
-    if(user.isLoggedIn === 'R'){
+    if (user.isLoggedIn === 'R') {
       url = `${appVars.backUrl}/R/logout`;
     }
 
@@ -81,7 +92,7 @@ const NavBar = () => {
                     Logout
                   </button>
                 ) : (
-                  <button type="button" className="btn btn-success">
+                  <button type="button" className="btn btn-success" onClick={handleLoginClick}>
                     Login
                   </button>
                 )}
